@@ -75,7 +75,7 @@ class Block1:
 		params = np.load(file_name)
 		lasagne.layers.set_all_param_values(self.network,params)
 		
-	def get_output(self,test_X):
+	def predict(self,test_X):
 		predictions = self.test_fn(test_X)
 		return predictions
 				
