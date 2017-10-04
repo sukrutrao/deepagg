@@ -13,15 +13,15 @@ class Block1:
 		target_var = T.ivector('targets')
 		self.network = self.get_network_layers(input_var)
 		prediction = lasagne.layers.get_output(self.network)
-		loss = lasagne.objectives.categorical_crossentropy(self.prediction,self.target_var)
-		loss = self.loss.mean()
+		loss = lasagne.objectives.categorical_crossentropy(prediction,target_var)
+		loss = loss.mean()
 		params = lasagne.layers.get_all_params(self.network,trainable=True)
-		updates = lasagne.updates.nestorov_momentum(loss,params,
+		updates = lasagne.updates.nesterov_momentum(loss,params,
 					learning_rate=learning_rate,momentum=momentum)
 		test_prediction = lasagne.layers.get_output(self.network, deterministic=True)
 		test_loss = lasagne.objectives.categorical_crossentropy(test_prediction,target_var)
 		test_loss = test_loss.mean()
-		self.test_acc = T.mean(T.eq(T.argmax(test_prediction, axis=1),target_var),dtype=theano.config.floatX)
+		test_acc = T.mean(T.eq(T.argmax(test_prediction, axis=1),target_var),dtype=theano.config.floatX)
 		self.train_fn = theano.function([input_var,target_var],loss,updates=updates)
 		self.val_fn = theano.function([input_var,target_var],[test_loss,test_acc])
 		self.test_fn = theano.function([input_var],prediction)
@@ -31,9 +31,10 @@ class Block1:
 		dense1 = lasagne.layers.DenseLayer(input_layer,num_units=10,nonlinearity=lasagne.nonlinearities.tanh)
 		dense2 = lasagne.layers.DenseLayer(dense1,num_units=10,nonlinearity=lasagne.nonlinearities.tanh)
 		dense3 = lasagne.layers.DenseLayer(dense2,num_units=10,nonlinearity=lasagne.nonlinearities.tanh)
+		result = lasagne.layers.DenseLayer(dense3,num_units=1,nonlinearity=lasagne.nonlinearities.sigmoid)
 		# scale between 0 and 1 from -1 and 1
-		print lasagne.layers.get_output_shape(dense3)
-		result = lasagne.layers.standardize(dense3,offset=-1,scale=2)
+	#	print lasagne.layers.get_output_shape(dense3)
+#		result = lasagne.layers.standardize(dense3,offset=-1,scale=2)
 		return result
 		
 	def train(self,train_X,train_y,val_X,val_y,num_epochs,batch_size,learning_rate=0.01,momentum=0.9):
