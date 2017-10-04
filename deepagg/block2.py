@@ -21,17 +21,27 @@ class Block2:
 			for j in range(0,self.number_of_people):
 				if test_X_element[j] == i:
 					this_class_prob = this_class_prob*self.ability_vector[j]
-				else:
+				elif test_X_element[j] >= 0:
 					this_class_prob = this_class_prob*(1-self.ability_vector[j])
+					this_class_prob = this_class_prob/(self.num_classes-1)
+				else:
+					this_class_prob = this_class_prob*0.5 # check!
 			predictions.append(this_class_prob)
 		predictions = np.array(predictions)
 		class_predicted = np.argmax(predictions)
 		return class_predicted
 		
-	def predict(self,test_X):
+	def predict_single(self,test_X):
 		predictions = []
 		for i in range(0,len(test_X)):
 			predictions.append(predict_element(test_X[i]))
+		predictions = np.array(predictions)
+		return predictions
+		
+	def predict_multiple(self,test_X):
+		predictions = []
+		for i in range(0,len(test_X)):
+			predictions.append(predict_single(test_X[i]))
 		predictions = np.array(predictions)
 		return predictions
 		
