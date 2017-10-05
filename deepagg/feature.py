@@ -84,9 +84,9 @@ class FeatureRepresenter:
 		for difficulty_bucket in self.get_buckets(self.difficulties[:],self.k_difficulty):
 			difficulties_bucket_wise.append(self.get_difficulty_in_bucket(difficulty_bucket))
 		self.abilities_bucket_wise = np.array(abilities_bucket_wise)
-		self.difficulties_bucket_wise = np.array(difficulties_bucket_wise)
+		self.difficulties_bucket_wise = np.array(difficulties_bucket_wise)				
 		
-	def get_features_2d(self,person,question):
+	def get_features_2d_element(self,person,question):
 		feature_list = []
 		feature_list.append(self.abilities[person][0])
 		for i in range(0,self.k_ability):
@@ -96,6 +96,18 @@ class FeatureRepresenter:
 			feature_list.append(self.difficulties_bucket_wise[i][question][0])
 		feature_list = np.array(feature_list)
 		return feature_list
+		
+	def get_features_2d(self):
+		features_list = []
+		labels_list = []
+		for i in range(0,self.num_participants):
+			for j in range(0,self.num_questions):
+				features_list.append(self.get_features_2d_element(i,j))
+				labels_list.append(self.current_proposals[j])
+		features_list = np.array(features_list)
+		labels_list = np.array(labels_list)
+		return features_list, labels_list
+		
 		
 if __name__ == "__main__":
 	feature = FeatureRepresenter(3,3,3,3,2)
