@@ -71,12 +71,18 @@ class EM2D:
 		return proposals
 		
 	def cor(self,input_data,proposals):
+		"""
+		The E step
+		"""
 		self.feature.generate_features_2d(input_data,proposals)
 		test_X, test_y = self.feature.get_features_2d()
 		abilities = self.block1.predict(test_X)
 		return abilities
 		
 	def ref(self,abilities,input_data):
+		"""
+		The M step
+		"""
 		proposals = []
 		ability_matrix = []
 		counter = 0

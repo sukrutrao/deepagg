@@ -4,11 +4,21 @@ import theano.tensor as T
 import lasagne
 
 class Block1:
+	"""
+	Defines the Block1 Neural network
+	"""
 	
 	def __init__(self,input_dimension):
+		"""
+		input_dimension - number of dimensions of input to Block1,
+						  in our case, probably 8
+		"""
 		self.input_dimension = input_dimension
 		
 	def define_network(self,learning_rate=0.01,momentum=0.9):
+		"""
+		Define the theano functions
+		"""
 		input_var = T.matrix('inputs')
 		target_var = T.ivector('targets')
 		self.network = self.get_network_layers(input_var)
@@ -27,6 +37,9 @@ class Block1:
 		self.test_fn = theano.function([input_var],prediction)
 		
 	def get_network_layers(self,input_var):
+		"""
+		Define the network architecture
+		"""
 		input_layer = lasagne.layers.InputLayer((None,self.input_dimension),input_var=input_var)
 		dense1 = lasagne.layers.DenseLayer(input_layer,num_units=10,nonlinearity=lasagne.nonlinearities.tanh)
 		dense2 = lasagne.layers.DenseLayer(dense1,num_units=10,nonlinearity=lasagne.nonlinearities.tanh)
@@ -38,6 +51,9 @@ class Block1:
 		return result
 		
 	def train(self,train_X,train_y,val_X,val_y,num_epochs,batch_size,learning_rate=0.01,momentum=0.9):
+		"""
+		Train the network. This is thr function to call from outside
+		"""
 		self.define_network(learning_rate,momentum)
 		for epoch in range(num_epochs):
 			# In each epoch, we do a full pass over the training data:
@@ -69,17 +85,29 @@ class Block1:
 				val_acc / val_batches * 100))
 				
 	def save_weights(self,file_name):
+		"""
+		Save the weights to a file. This should be called after train()
+		"""
 		np.save(file_name,lasagne.layers.get_all_param_values(self.network))
 	
 	def load_weights(self,file_name):
+		"""
+		Load the weights from a file
+		"""
 		params = np.load(file_name)
 		lasagne.layers.set_all_param_values(self.network,params)
 		
 	def predict(self,test_X):
+		"""
+		Get predictions for an input
+		"""
 		predictions = self.test_fn(test_X)
 		return predictions
 				
 	def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
+		"""
+		Helper to iterate over minibatches, taken from mnist example of lasagne
+		"""
 		assert len(inputs) == len(targets)
 		if shuffle:
 			indices = np.arange(len(inputs))

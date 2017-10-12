@@ -6,6 +6,9 @@ import theano.tensor as T
 import lasagne
 
 def majority_voting(input_data,num_classes,num_dimensions=2):
+	"""
+	Get result of majority voting
+	"""
 	# currently supporting only 2D
 	num_participants = len(input_data)
 	if num_participants > 0:
@@ -22,6 +25,9 @@ def majority_voting(input_data,num_classes,num_dimensions=2):
 	return proposals
 	
 def augment_set(train_X,train_y,num_p,num_q,factor):
+	"""
+	Perform augmentation
+	"""
 	if (len(train_X) <= num_p or len(train_y) <= num_q):
 		yield train_X, train_y
 	else:
@@ -45,6 +51,9 @@ def augment_set(train_X,train_y,num_p,num_q,factor):
 			yield s_train_X, s_train_y
 	
 def split_train_and_val(total_train_X,total_train_y,validate_split=0.2):
+	"""
+	Split into train and validation splits
+	"""
 	total_p = len(total_train_X)
 	total_q = len(total_train_y)
 	val_p_count = int(validate_split*total_p)
