@@ -33,7 +33,7 @@ class EM2D:
 		Train the neural network corresponding to block1
 		"""
 		# get the train data as a 2D matrix and train labels as a vector
-		train_X, train_y = self.loader.get_data(train_csv)
+		train_X, train_y = self.loader.get_data(train_csv, gt_csv)
 		total_train_X = [], total_train_y = []
 		for s_train_X, s_train_y in utils.augment_set(train_X,train_y,self.num_participants,
 						self.num_questions,multiplicative_factor):
