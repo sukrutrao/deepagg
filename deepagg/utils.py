@@ -4,6 +4,7 @@ import scipy.misc
 import theano
 import theano.tensor as T
 import lasagne
+import sys
 
 def majority_voting(input_data,num_classes,num_dimensions=2):
 	"""
@@ -16,6 +17,8 @@ def majority_voting(input_data,num_classes,num_dimensions=2):
 	else:
 		return np.empty(0)
 	proposals = []
+	input_data = input_data.astype(int)
+#	sys.exit(0)
 	for i in range(0,num_questions):
 		class_counts = np.zeros(num_classes,dtype=int)
 		for j in range(0,num_participants):
@@ -29,6 +32,7 @@ def augment_set(train_X,train_y,num_p,num_q,factor):
 	Perform augmentation
 	"""
 	if (len(train_X) <= num_p or len(train_y) <= num_q):
+		print "Yielding"
 		yield train_X, train_y
 	else:
 		total_p = len(train_X)
@@ -64,6 +68,8 @@ def split_train_and_val(total_train_X,total_train_y,validate_split=0.2):
 	train_y = []
 	val_X = []
 	val_y = []
+	print np.shape(total_train_X)
+#	sys.exit(0)
 	for i in range(0,total_p):
 		if i in val_p:
 			val_X_element = []
@@ -87,3 +93,10 @@ def split_train_and_val(total_train_X,total_train_y,validate_split=0.2):
 	val_X = np.array(val_X)
 	val_y = np.array(val_y)
 	return train_X, train_y, val_X, val_y
+	
+def flatten_2D_list(input_list):
+	result_list = []
+	for i in range(0,len(input_list)):
+		for j in range(0,len(input_list[i])):
+			result_list.append(input_list[i][j])
+	return result_list

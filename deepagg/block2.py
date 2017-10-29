@@ -2,6 +2,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 import lasagne
+import sys
 
 class Block2:
 	"""
@@ -20,6 +21,9 @@ class Block2:
 		"""
 		Store the ability vector in the network
 		"""
+		print self.number_of_people
+		print np.shape(ability_vector)
+	#	sys.exit(0)
 		assert self.number_of_people == len(ability_vector)
 		self.ability_vector = ability_vector
 		

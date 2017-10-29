@@ -43,10 +43,11 @@ class FeatureRepresenter:
 		Get average difficulty in 2D case
 		"""
 		difficulties = []
+	#	print np.shape(self.input_data)
 		for i in range(0,self.num_questions):
 			correct_count = 0
 			for j in range(0,self.num_participants):
-				if self.current_proposals[j] == self.input_data[i][j]:
+				if self.current_proposals[i] == self.input_data[j][i]:
 					correct_count += 1
 			difficulty = 1-float(correct_count)/self.num_participants
 			difficulties.append((difficulty,i))
@@ -70,31 +71,37 @@ class FeatureRepresenter:
 		"""
 		Get the ability in the bucket ability_bucket
 		"""
-		abilities = []
-		for i in range(0,self.num_participants):
+		difficulties = []
+		for i in range(0,self.num_questions):
 			correct_count = 0	
 			for j in range(0,len(ability_bucket)):
-				if self.current_proposals[ability_bucket[j][1]] == self.input_data[i][ability_bucket[j][1]]:
+				if self.current_proposals[i] == self.input_data[ability_bucket[j][1]][i]:
 					correct_count += 1
-			ability = float(correct_count)/len(ability_bucket)
-			abilities.append((ability,i))
-		abilities = np.array(abilities)
-		return abilities
+			difficulty = float(correct_count)/len(ability_bucket)
+			difficulties.append((difficulty,i))
+		difficulties = np.array(difficulties)
+		return difficulties
 		
 	def get_difficulty_in_bucket(self,difficulty_bucket):
 		"""
 		Get the difficulty in the bucket difficulty_bucket
 		"""
-		difficulties = []
-		for i in range(0,self.num_questions):
+		abilities = []
+	#	print np.shape(self.input_data)
+	#	print np.shape(self.current_proposals)
+	#	print len(difficulty_bucket)
+	#	print difficulty_bucket
+		for i in range(0,self.num_participants):
 			correct_count = 0	
 			for j in range(0,len(difficulty_bucket)):
-				if self.current_proposals[i] == self.input_data[difficulty_bucket[j][1]][i]:
+		#		print i, j
+		#		print difficulty_bucket[j][1]
+				if self.current_proposals[j] == self.input_data[i][difficulty_bucket[j][1]]:
 					correct_count += 1
-			difficulty = 1-float(correct_count)/len(difficulty_bucket)
-			difficulties.append((difficulty,i))
-		difficulties = np.array(difficulties)
-		return difficulties
+			ability = 1-float(correct_count)/len(difficulty_bucket)
+			abilities.append((ability,i))
+		abilities = np.array(abilities)
+		return abilities
 		
 	def generate_features_2d(self,input_data,current_proposals):
 		"""
@@ -110,9 +117,9 @@ class FeatureRepresenter:
 		abilities_bucket_wise = []
 		difficulties_bucket_wise = []
 		for ability_bucket in self.get_buckets(self.abilities[:],self.k_ability):
-			abilities_bucket_wise.append(self.get_ability_in_bucket(ability_bucket))
+			difficulties_bucket_wise.append(self.get_ability_in_bucket(ability_bucket))
 		for difficulty_bucket in self.get_buckets(self.difficulties[:],self.k_difficulty):
-			difficulties_bucket_wise.append(self.get_difficulty_in_bucket(difficulty_bucket))
+			abilities_bucket_wise.append(self.get_difficulty_in_bucket(difficulty_bucket))
 		self.abilities_bucket_wise = np.array(abilities_bucket_wise)
 		self.difficulties_bucket_wise = np.array(difficulties_bucket_wise)				
 		

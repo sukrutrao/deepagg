@@ -102,3 +102,6 @@ ENV/
 
 # Backup files
 *~
+
+# Numpy weights 
+*.npy

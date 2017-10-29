@@ -1,5 +1,6 @@
 import numpy as np 
 import csv
+import sys
 
 class Loader:
 	"""
@@ -34,14 +35,28 @@ class Loader:
 			for row in gt_reader:
 				answers.append(row)
 		answers = np.array(answers, dtype=int)
-		print answers
 		assert(len(answers) == questions)
 		gt = np.zeros(questions)
 		for i in range(0, questions):
 			question = answers[i][0]
 			gt[question] = answers[i][1]
 		print gt
+		print np.shape(result_data)
+#		sys.exit(0)
 		return result_data, gt
+		
+	def get_gt(self,gt_csv):
+		answers = []
+		with open(gt_csv, "r") as gt_data:
+			gt_reader = csv.reader(gt_data, delimiter=",")
+			for row in gt_reader:
+				answers.append(row)
+		answers = np.array(answers, dtype=int)
+		gt = np.zeros(len(answers))
+		for i in range(0, len(answers)):
+			question = answers[i][0]
+			gt[question] = answers[i][1]
+		return gt
 		
 	def get_counts(self, data):
 		shape = np.shape(data)
