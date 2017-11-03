@@ -114,6 +114,7 @@ class Block1:
 		Load the weights from a file
 		"""
 		params = np.load(file_name)
+		self.define_network()
 		lasagne.layers.set_all_param_values(self.network,params)
 		
 	def predict(self,test_X):

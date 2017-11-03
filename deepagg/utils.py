@@ -10,21 +10,39 @@ def majority_voting(input_data,num_classes,num_dimensions=2):
 	"""
 	Get result of majority voting
 	"""
-	# currently supporting only 2D
+	# currently supports only 2D and 3D
+	assert num_dimensions == 2 or num_dimensions == 3
 	num_participants = len(input_data)
 	if num_participants > 0:
 		num_questions = len(input_data[0])
 	else:
 		return np.empty(0)
-	proposals = []
-	input_data = input_data.astype(int)
+	if num_dimensions == 2:
+		proposals = []
+		input_data = input_data.astype(int)
+	#	sys.exit(0)
+		for i in range(0,num_questions):
+			class_counts = np.zeros(num_classes,dtype=int)
+			for j in range(0,num_participants):
+				class_counts[input_data[j][i]] += 1
+			proposals.append(np.argmax(class_counts))
+		proposals = np.array(proposals,dtype=np.int)
+	elif num_dimensions == 3:
+		proposals = []
+		input_data = input_data.astype(int)
+		num_options = input_data.shape[2]
+	#	sys.exit(0)
+		for i in range(0,num_questions):
+			proposal_element = []
+			for j in range(0,num_options):
+				class_counts = np.zeros(num_classes,dtype=int)
+				for k in range(0,num_participants):
+					class_counts[input_data[k][i][j]] += 1
+				proposal_element.append(np.argmax(class_counts))
+			proposals.append(proposal_element)
+		proposals = np.array(proposals,dtype=np.int32)
+	print proposals
 #	sys.exit(0)
-	for i in range(0,num_questions):
-		class_counts = np.zeros(num_classes,dtype=int)
-		for j in range(0,num_participants):
-			class_counts[input_data[j][i]] += 1
-		proposals.append(np.argmax(class_counts))
-	proposals = np.array(proposals)
 	return proposals
 	
 def augment_set(train_X,train_y,num_p,num_q,factor):

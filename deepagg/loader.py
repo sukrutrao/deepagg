@@ -45,6 +45,46 @@ class Loader:
 #		sys.exit(0)
 		return result_data, gt
 		
+	def get_data_3D(self, crowd_csv, gt_csv=None, order="question"):
+		assert(order == "question") # temporary, later also allow for "participant"
+		data = []
+		with open(crowd_csv, "r") as crowd_data:
+			crowd_reader = csv.reader(crowd_data, delimiter=",")
+			for row in crowd_reader:
+				data.append(row)
+		data = np.array(data, dtype=int)
+	#	print np.shape(data)
+		questions, persons = self.get_counts(data)
+		options = len(data[0])-2
+	#	print questions, persons, options
+	#	sys.exit(0)
+		result_data = np.zeros((persons, questions, options))
+		for i in range(0, len(data)):
+			question = data[i][0]
+			person = data[i][1]
+			for j in range(0,options):
+				result_data[person][question][j] = data[i][2+j]
+	#	print result_data
+	#	sys.exit(0)
+		if gt_csv == None:
+			return result_data
+		answers = []
+		with open(gt_csv, "r") as gt_data:
+			gt_reader = csv.reader(gt_data, delimiter=",")
+			for row in gt_reader:
+				answers.append(row)
+		answers = np.array(answers, dtype=int)
+		assert(len(answers) == questions)
+		gt = np.zeros((questions,options),dtype=np.int)
+		for i in range(0, questions):
+			question = answers[i][0]
+			for j in range(0,options):
+				gt[question][j] = answers[i][1+j]
+	#	print gt.astype(np.int)
+	#	print np.shape(result_data)
+	#	sys.exit(0)
+		return result_data, gt.astype(np.int)
+		
 	def get_gt(self,gt_csv):
 		answers = []
 		with open(gt_csv, "r") as gt_data:
@@ -56,6 +96,22 @@ class Loader:
 		for i in range(0, len(answers)):
 			question = answers[i][0]
 			gt[question] = answers[i][1]
+		return gt
+		
+	def get_gt_3D(self,gt_csv):
+		answers = []
+		with open(gt_csv, "r") as gt_data:
+			gt_reader = csv.reader(gt_data, delimiter=",")
+			for row in gt_reader:
+				answers.append(row)
+		answers = np.array(answers, dtype=int)
+		questions = len(answers)
+		options = len(answers[0])-1
+		gt = np.zeros((questions,options),dtype=np.int)
+		for i in range(0, questions):
+			question = answers[i][0]
+			for j in range(0,options):
+				gt[question][j] = answers[i][1+j]
 		return gt
 		
 	def get_counts(self, data):
@@ -74,6 +130,6 @@ class Loader:
 
 if __name__ == "__main__":	
 	loader = Loader()
-	loader.get_data('/home/home/Sukrut/crowdsourced-data-simulator/data.csv','/home/home/Sukrut/crowdsourced-data-simulator/gt.csv')
+	loader.get_data_3D('/home/sukrut/CS3035/crowdsourced-data-simulator/data.csv','/home/sukrut/CS3035/crowdsourced-data-simulator/gt.csv')
 
 
