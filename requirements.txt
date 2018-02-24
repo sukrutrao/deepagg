@@ -1,0 +1,3 @@
+Lasagne==0.2.dev1
+numpy==1.13.1
+Theano==0.9.0
