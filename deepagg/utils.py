@@ -20,7 +20,6 @@ def majority_voting(input_data,num_classes,num_dimensions=2):
 	if num_dimensions == 2:
 		proposals = []
 		input_data = input_data.astype(int)
-	#	sys.exit(0)
 		for i in range(0,num_questions):
 			class_counts = np.zeros(num_classes,dtype=int)
 			for j in range(0,num_participants):
@@ -31,7 +30,6 @@ def majority_voting(input_data,num_classes,num_dimensions=2):
 		proposals = []
 		input_data = input_data.astype(int)
 		num_options = input_data.shape[2]
-	#	sys.exit(0)
 		for i in range(0,num_questions):
 			proposal_element = []
 			for j in range(0,num_options):
@@ -41,8 +39,6 @@ def majority_voting(input_data,num_classes,num_dimensions=2):
 				proposal_element.append(np.argmax(class_counts))
 			proposals.append(proposal_element)
 		proposals = np.array(proposals,dtype=np.int32)
-	print proposals
-#	sys.exit(0)
 	return proposals
 	
 def augment_set(train_X,train_y,num_p,num_q,factor):
@@ -50,7 +46,6 @@ def augment_set(train_X,train_y,num_p,num_q,factor):
 	Perform augmentation
 	"""
 	if (len(train_X) <= num_p or len(train_y) <= num_q):
-		print "Yielding"
 		yield train_X, train_y
 	else:
 		total_p = len(train_X)
@@ -86,8 +81,6 @@ def split_train_and_val(total_train_X,total_train_y,validate_split=0.2):
 	train_y = []
 	val_X = []
 	val_y = []
-	print np.shape(total_train_X)
-#	sys.exit(0)
 	for i in range(0,total_p):
 		if i in val_p:
 			val_X_element = []

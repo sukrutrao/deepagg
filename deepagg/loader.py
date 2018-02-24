@@ -18,15 +18,12 @@ class Loader:
 			for row in crowd_reader:
 				data.append(row)
 		data = np.array(data, dtype=int)
-		print np.shape(data)
 		questions, persons = self.get_counts(data)
-		print questions, persons
 		result_data = np.zeros((persons, questions))
 		for i in range(0, len(data)):
 			question = data[i][0]
 			person = data[i][1]
 			result_data[person][question] = data[i][2]
-		print result_data
 		if gt_csv == None:
 			return result_data
 		answers = []
@@ -40,9 +37,6 @@ class Loader:
 		for i in range(0, questions):
 			question = answers[i][0]
 			gt[question] = answers[i][1]
-		print gt
-		print np.shape(result_data)
-#		sys.exit(0)
 		return result_data, gt
 		
 	def get_data_3D(self, crowd_csv, gt_csv=None, order="question"):
@@ -53,19 +47,14 @@ class Loader:
 			for row in crowd_reader:
 				data.append(row)
 		data = np.array(data, dtype=int)
-	#	print np.shape(data)
 		questions, persons = self.get_counts(data)
 		options = len(data[0])-2
-	#	print questions, persons, options
-	#	sys.exit(0)
 		result_data = np.zeros((persons, questions, options))
 		for i in range(0, len(data)):
 			question = data[i][0]
 			person = data[i][1]
 			for j in range(0,options):
 				result_data[person][question][j] = data[i][2+j]
-	#	print result_data
-	#	sys.exit(0)
 		if gt_csv == None:
 			return result_data
 		answers = []
@@ -80,9 +69,6 @@ class Loader:
 			question = answers[i][0]
 			for j in range(0,options):
 				gt[question][j] = answers[i][1+j]
-	#	print gt.astype(np.int)
-	#	print np.shape(result_data)
-	#	sys.exit(0)
 		return result_data, gt.astype(np.int)
 		
 	def get_gt(self,gt_csv):
@@ -130,6 +116,6 @@ class Loader:
 
 if __name__ == "__main__":	
 	loader = Loader()
-	loader.get_data_3D('/home/sukrut/CS3035/crowdsourced-data-simulator/data.csv','/home/sukrut/CS3035/crowdsourced-data-simulator/gt.csv')
+	loader.get_data_3D('data.csv','gt.csv')
 
 

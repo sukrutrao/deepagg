@@ -21,9 +21,6 @@ class Block2:
 		"""
 		Store the ability vector in the network
 		"""
-		print self.number_of_people
-		print np.shape(ability_vector)
-	#	sys.exit(0)
 		assert self.number_of_people == len(ability_vector)
 		self.ability_vector = ability_vector
 		
@@ -42,7 +39,7 @@ class Block2:
 					this_class_prob = this_class_prob*(1-self.ability_vector[j])
 					this_class_prob = this_class_prob/(self.num_classes-1)
 				else:
-					this_class_prob = this_class_prob*0.5 # check!
+					this_class_prob = this_class_prob*0.5
 			predictions.append(this_class_prob)
 		predictions = np.array(predictions)
 		class_predicted = np.argmax(predictions)
@@ -51,7 +48,7 @@ class Block2:
 	def predict_single(self,test_X):
 		"""
 		Get prediction for a given matrix of answers
-		PROBABLY WONT WORK as only a single ability vector is stored
+		CURRENTLY WONT WORK as only a single ability vector is stored
 		"""
 		predictions = []
 		for i in range(0,len(test_X)):
@@ -62,7 +59,7 @@ class Block2:
 	def predict_multiple(self,test_X):
 		"""
 		Get prediction for 3D matrix
-		PROBABLY WONT WORK as only a single ability vector is stored
+		CURRENTLY WONT WORK as only a single ability vector is stored
 		"""
 		predictions = []
 		for i in range(0,len(test_X)):

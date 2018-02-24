@@ -35,35 +35,25 @@ class EM2D:
 		"""
 		# get the train data as a 2D matrix and train labels as a vector
 		train_X, train_y = self.loader.get_data(train_csv, gt_csv)
-	#	train_X, train_y, val_X, val_y = utils.split_train_and_val(train_X,train_y,validate_split)
 		total_train_X = []
 		total_train_y = []
-#		self.feature.generate_features_2d(val_X,val_y)
 		# get the phi features and the labels in flattened vectors of dimensions p*q
-#		val_X, val_y = self.feature.get_features_2d()
-		print "AAA",len(train_X)
 		for s_train_X, s_train_y in utils.augment_set(train_X,train_y,self.num_participants,
 						self.num_questions,multiplicative_factor):
 			# generate the phi features using this data
 			self.feature.generate_features_2d(s_train_X,s_train_y)
 			# get the phi features and the labels in flattened vectors of dimensions p*q
 			f_train_X, f_train_y = self.feature.get_features_2d()
-			print "F",len(f_train_X)
 			total_train_X.append(f_train_X)
 			total_train_y.append(f_train_y)
 		# split it into train and validation splits
-		print len(total_train_y)
 		total_train_X = utils.flatten_2D_list(total_train_X)
 		total_train_y = utils.flatten_2D_list(total_train_y)
 		train_X = total_train_X
 		val_X = total_train_X
 		train_y = total_train_y
 		val_y = total_train_y
-		print len(total_train_X)
-	#	train_X, train_y, val_X, val_y = utils.split_train_and_val(total_train_X,total_train_y,validate_split)
 		# train the network
-		print len(train_X)
-	#	sys.exit(0)
 		train_X = np.array(train_X)
 		train_y = np.array(train_y)
 		val_X = np.array(val_X)
@@ -136,16 +126,12 @@ class EM2D:
 		self.feature.generate_features_2d(input_data,proposals)
 		test_X, test_y = self.feature.get_features_2d()
 		abilities = self.block1.predict(test_X)
-		print np.shape(input_data)
-	#	sys.exit(0)
 		return abilities
 		
 	def ref(self,abilities,input_data):
 		"""
 		The M step
 		"""
-		print np.shape(input_data)
-	#	sys.exit(0)
 		proposals = []
 		ability_matrix = []
 		counter = 0
@@ -156,15 +142,11 @@ class EM2D:
 				counter += 1
 			ability_matrix.append(ability_element)
 		ability_matrix = np.array(ability_matrix)
-		print np.shape(ability_matrix)
-	#	sys.exit(0)
 		for j in range(0,self.num_questions):
 			ability_vector = ability_matrix[:,j,0]
-			print np.shape(ability_vector)
-		#	sys.exit(0)
 			input_vector = input_data[:,j]
 			self.block2.fit(ability_vector)
-			# TODO use single function in block2 insteaf of iterating here
+			# TODO use single function in block2 instead of iterating here
 			prediction = self.block2.predict_element(input_vector)
 			proposals.append(prediction)
 		proposals = np.array(proposals)
@@ -196,35 +178,25 @@ class EM3D:
 		"""
 		# get the train data as a 2D matrix and train labels as a vector
 		train_X, train_y = self.loader.get_data_3D(train_csv, gt_csv)
-	#	train_X, train_y, val_X, val_y = utils.split_train_and_val(train_X,train_y,validate_split)
 		total_train_X = []
 		total_train_y = []
-#		self.feature.generate_features_2d(val_X,val_y)
 		# get the phi features and the labels in flattened vectors of dimensions p*q
-#		val_X, val_y = self.feature.get_features_2d()
-		print "AAA",len(train_X)
 		for s_train_X, s_train_y in utils.augment_set(train_X,train_y,self.num_participants,
 						self.num_questions,multiplicative_factor):
 			# generate the phi features using this data
 			self.feature.generate_features_3d(s_train_X,s_train_y)
 			# get the phi features and the labels in flattened vectors of dimensions p*q
 			f_train_X, f_train_y = self.feature.get_features_3d()
-			print "F",len(f_train_X)
 			total_train_X.append(f_train_X)
 			total_train_y.append(f_train_y)
 		# split it into train and validation splits
-		print len(total_train_y)
 		total_train_X = utils.flatten_2D_list(total_train_X)
 		total_train_y = utils.flatten_2D_list(total_train_y)
 		train_X = total_train_X
 		val_X = total_train_X
 		train_y = total_train_y
 		val_y = total_train_y
-		print len(total_train_X)
-	#	train_X, train_y, val_X, val_y = utils.split_train_and_val(total_train_X,total_train_y,validate_split)
 		# train the network
-		print len(train_X)
-	#	sys.exit(0)
 		train_X = np.array(train_X)
 		train_y = np.array(train_y)
 		val_X = np.array(val_X)
@@ -313,16 +285,12 @@ class EM3D:
 		self.feature.generate_features_3d(input_data,proposals)
 		test_X, test_y = self.feature.get_features_3d()
 		abilities = self.block1.predict(test_X)
-		print np.shape(input_data)
-	#	sys.exit(0)
 		return abilities
 		
 	def ref(self,abilities,input_data):
 		"""
 		The M step
 		"""
-		print np.shape(input_data)
-	#	sys.exit(0)
 		proposals = []
 		ability_matrix = []
 		counter = 0
@@ -336,17 +304,13 @@ class EM3D:
 				ability_question.append(ability_option)
 			ability_matrix.append(ability_question)
 		ability_matrix = np.array(ability_matrix)
-		print np.shape(ability_matrix)
-#		sys.exit(0)
 		for j in range(0,self.num_questions):
 			proposal_element = []
 			for k in range(0,self.num_options):
 				ability_vector = ability_matrix[:,j,k]
-				print np.shape(ability_vector)
-			#	sys.exit(0)
 				input_vector = input_data[:,j,k]
 				self.block2.fit(ability_vector)
-				# TODO use single function in block2 insteaf of iterating here
+				# TODO use single function in block2 instead of iterating here
 				prediction = self.block2.predict_element(input_vector)
 				proposal_element.append(prediction)
 			proposals.append(proposal_element)
