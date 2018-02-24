@@ -116,6 +116,3 @@ class Loader:
 
 if __name__ == "__main__":	
 	loader = Loader()
-	loader.get_data_3D('data.csv','gt.csv')
-
-
