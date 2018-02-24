@@ -116,3 +116,4 @@ class Loader:
 
 if __name__ == "__main__":	
 	loader = Loader()
+	print "Define Loader for DeepAgg"

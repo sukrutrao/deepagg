@@ -317,5 +317,4 @@ if __name__ == "__main__":
 	feature = FeatureRepresenter(3,3,1,1,2)
 	feature = FeatureRepresenter_3D(3,2,3,2,3,1)
 	feature.generate_features_3d([[[1,1,0],[1,1,0]],[[1,0,1],[0,1,0]],[[1,1,1],[0,1,1]]],[[1,0,0],[0,1,0]])
-	print feature.get_features_3d_element(1,1,1)
 	print "Defined Feature Creator for DeepAgg"
